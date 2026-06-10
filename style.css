@@ -32,6 +32,15 @@ body{
     }
 }
 
+i{
+    color: black;
+}
+
+button{
+    -webkit-appearance: none;
+    appearance: none;
+}   
+
 #cabecalho {
     background-color: #1DAA61;
     display: flex;
