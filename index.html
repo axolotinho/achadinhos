@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="Logo.svg" type="image/x-icon">
+    <title>Página inicial</title>
+    <script src="https://kit.fontawesome.com/b19f5f3198.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="background-icons"></div>
+    <header>
+        <div id="cabecalho">
+            <img src="Logo.svg">
+            <h2>Achadinhos</h2>
+        </div>
+    </header>
+
+    <main>
+        <div id="hub">
+            <div class="item">
+                <button><i class="fa-regular fa-circle-user"></i></button>
+                <hr>
+            </div>
+
+            <div class="item">
+                <button><i class="fa-solid fa-clock-rotate-left"></i></button>
+                <hr>
+            </div>
+
+            <div class="item">
+                <button><i class="fa-regular fa-bookmark"></i></button>
+                <hr>
+            </div>
+
+            <div class="item">
+                <button><i class="fa-regular fa-circle-question"></i></button>
+                <hr>
+            </div>
+
+            <div class="item">
+                <button onclick="criar()"><i class="fa-solid fa-plus"></i></button>
+            </div>
+        </div>
+        <div id="pesquisar">
+            <div id="caixa"><button id="loop"><i class="fa-solid fa-magnifying-glass"></i></button><input type="text" name="search" id="search" placeholder="Pesquisar"></div>
+        </div>
+        <div id="container-mapa">
+            <div id="mapa">
+                <div class="pin" style="top:55%; left: 54%;">
+                    <img src="pessoa (4).jpg">
+                    <span>Calçados</span>
+                </div>
+
+                <div class="pin" style="top: 25%; left: 55%;">
+                    <img src="pessoa (1).jpg">
+                    <span>Lanches</span>
+                </div>
+
+                <div class="pin" style="top: 63%; left: 28%;">
+                    <img src="pessoa (2).jpg">
+                    <span>Acessórios</span>
+                </div>
+
+                <div class="pin" style="top: 66%; left: 25%;">
+                    <img src="pessoa (3).jpg">
+                    <span>Acessórios</span>
+                </div>
+
+                <div class="pin" style="top: 40%; left: 54%;">
+                    <img src="pessoa (5).jpg">
+                    <span>Bolsas</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div id="produto">
+            <div id="resumo">
+                <div id="random">
+                    <i class="fa-solid fa-cookie"></i>
+                    <i class="fa-solid fa-socks"></i>
+                    <i class="fa-solid fa-key"></i>
+                    <i class="fa-solid fa-paw"></i>
+                    <i class="fa-solid fa-pen"></i>
+                    <i class="fa-solid fa-plate-wheat"></i>
+                    <i class="fa-solid fa-book"></i>
+                    <i class="fa-regular fa-clock"></i>
+                </div>
+
+                <span class="linha"></span>
+
+                <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+
+            <div id="campos">
+                <input type="text" placeholder="Produto">
+                <span class="linha"></span>
+                <input type="text" placeholder="Preço" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
+            </div>
+        </div>
+    </footer>
+
+    <div id="criar-loja">
+        <div id="painel-criar">
+
+            <button id="fechar-criar" onclick="fecharCriar()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2>Criar Loja</h2>
+
+            <div class="upload-area">
+                <img class="preview">
+
+                <div class="upload-conteudo">
+                    <i class="fa-solid fa-camera"></i>
+                    <span>Foto do comerciante</span>
+                </div>
+
+                <input
+                    type="file"
+                    accept="image/*"
+                    onchange="previewImagem(this)"
+                >
+            </div>
+            <input type="text" placeholder="Nome">
+
+            <input type="text" placeholder="Localização">
+
+            <input type="text" list="categorias" placeholder="Categoria">
+
+            <datalist id="categorias">
+                <option value="Lanches">
+                <option value="Calçados">
+                <option value="Acessórios">
+                <option value="Bolsas">
+                <option value="Roupas">
+                <option value="Eletrônicos">
+                <option value="Artesanato">
+            </datalist>
+
+            <div id="lista-produtos">
+
+            </div>
+
+            <div id="acoes-formulario">
+
+                <button onclick="adicionarProduto()">
+                    <i class="fa-solid fa-plus"></i>
+                    Adicionar Produto
+                </button>
+
+                <button id="enviar-loja" onclick="enviarLoja()">
+                    <i class="fa-solid fa-paper-plane"></i>
+                    Enviar
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const produto = document.getElementById("produto");
+        const caixa = document.getElementById("caixa");
+        const icons = document.querySelectorAll("#random i");
+
+        function sortearIcone() {
+            icons.forEach(icon => {
+                icon.style.display = "none";
+            });
+
+            const sorteado = Math.floor(Math.random() * icons.length);
+            icons[sorteado].style.display = "inline-block";
+        }
+
+        produto.addEventListener("mouseenter", sortearIcone);
+
+        sortearIcone();
+
+        produto.addEventListener("mouseenter", () => {
+            produto.classList.add("aberto");
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            const rect = produto.getBoundingClientRect();
+
+            const margem = 250;
+
+            const dentro =
+                e.clientX >= rect.left - margem &&
+                e.clientX <= rect.right + margem &&
+                e.clientY >= rect.top - margem &&
+                e.clientY <= rect.bottom + margem;
+
+            if (!dentro) {
+                produto.classList.remove("aberto");
+            }
+        });
+
+        caixa.addEventListener("mouseenter", () => {
+            caixa.classList.add("hover");
+        });
+
+        document.addEventListener("mousemove", (e) => {
+            const rect = caixa.getBoundingClientRect();
+
+            const margem = 100;
+
+            const dentro =
+                e.clientX >= rect.left - margem &&
+                e.clientX <= rect.right + margem &&
+                e.clientY >= rect.top - margem &&
+                e.clientY <= rect.bottom + margem;
+
+            if (!dentro) {
+                caixa.classList.remove("hover");
+            }
+        });
+        const container = document.getElementById("container-mapa");
+        const mapa = document.getElementById("mapa");
+
+        let pressionado = false;
+
+        let startX = 0;
+        let startY = 0;
+
+        let translateX = 0;
+        let translateY = 0;
+
+        mapa.addEventListener("touchstart", (e) => {
+            pressionado = true;
+
+            startX = e.touches[0].clientX - translateX;
+            startY = e.touches[0].clientY - translateY;
+        });
+
+        document.addEventListener("touchmove", (e) => {
+
+            if (!pressionado) return;
+
+            translateX =
+                e.touches[0].clientX - startX;
+
+            translateY =
+                e.touches[0].clientY - startY;
+
+            const minX =
+                container.clientWidth - mapa.offsetWidth;
+
+            const minY =
+                container.clientHeight - mapa.offsetHeight;
+
+            translateX =
+                Math.min(0, Math.max(minX, translateX));
+
+            translateY =
+                Math.min(0, Math.max(minY, translateY));
+
+            mapa.style.transform =
+                `translate(${translateX}px, ${translateY}px)`;
+        });
+
+        document.addEventListener("touchend", () => {
+            pressionado = false;
+        });
+
+        const background = document.getElementById("background-icons");
+
+        const icones = [
+            "fa-apple-whole",
+            "fa-pizza-slice",
+            "fa-hotdog",
+            "fa-wheat-awn",
+            "fa-mug-hot",
+            "fa-bone",
+            "fa-burger",
+            "fa-ice-cream",
+            "fa-glass-water",
+            "fa-candy-cane",
+            "fa-cat",
+            "fa-dog",
+            "fa-horse-head",
+            "fa-spider",
+            "fa-worm",
+            "fa-frog",
+            "fa-cow",
+            "fa-paw",
+            "fa-kiwi-bird",
+            "fa-fish",
+            "fa-glasses",
+            "fa-socks",
+            "fa-user-tie",
+            "fa-shirt",
+            "fa-shoe-prints",
+            "fa-hat-cowboy",
+            "fa-chess",
+            "fa-vr-cardboard",
+            "fa-heart",
+            "fa-puzzle-piece",
+            "fa-motorcycle",
+            "fa-camera",
+            "fa-droplet",
+            "fa-file-lines",
+            "fa-cake-candles",
+            "fa-marker"
+        ];
+
+        function criarFundo() {
+
+            background.innerHTML = "";
+
+            const largura = window.innerWidth;
+            const altura = window.innerHeight;
+
+            const quantidade = Math.floor((largura * altura) / 18000);
+
+            for (let i = 0; i < quantidade; i++) {
+
+                const icone = document.createElement("i");
+
+                const sorteado =
+                    icones[Math.floor(Math.random() * icones.length)];
+
+                icone.className = `fa-solid ${sorteado} bg-icon`;
+
+                const tamanho =
+                    Math.max(18, Math.min(60, largura / 30));
+
+                icone.style.fontSize =
+                    `${tamanho + Math.random() * tamanho}px`;
+
+                icone.style.left =
+                    `${Math.random() * 120 - 10}%`;
+
+                icone.style.top =
+                    `${Math.random() * 120 - 20}%`;
+
+                icone.style.animationDuration =
+                    `${20 + Math.random() * 25}s`;
+
+                icone.style.animationDelay =
+                    `${-Math.random() * 30}s`;
+
+                background.appendChild(icone);
+            }
+        }
+
+        criarFundo();
+
+        window.addEventListener("resize", criarFundo);
+        function criar(){
+
+            const mobile =
+                window.innerWidth <= 768;
+
+            document
+                .getElementById("criar-loja")
+                .classList
+                .add("ativo");
+
+            if(mobile){
+
+                document
+                    .getElementById("pesquisar")
+                    .style.display = "none";
+
+                document
+                    .getElementById("container-mapa")
+                    .style.display = "none";
+
+                document
+                    .querySelector("footer")
+                    .style.display = "none";
+            }
+
+        }
+        function adicionarProduto(){
+
+            const lista =
+                document.getElementById("lista-produtos");
+
+            const div =
+                document.createElement("div");
+
+            div.className = "produto-item";
+
+            div.innerHTML = `
+                <button class="remover-produto" onclick="this.parentElement.remove()">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+
+                <div class="upload-area produto-foto">
+
+                    <img class="preview">
+
+                    <div class="upload-conteudo">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>Foto do Produto</span>
+                    </div>
+
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onchange="previewImagem(this)"
+                    >
+
+                </div>
+
+                <input type="text" placeholder="Nome do produto">
+
+                <input
+                    type="number"
+                    placeholder="Preço"
+                    step="0.01"
+                >
+            `;
+
+            lista.appendChild(div);
+
+        }
+        function fecharCriar(){
+
+            document
+                .getElementById("criar-loja")
+                .classList
+                .remove("ativo");
+
+            document
+                .getElementById("pesquisar")
+                .style.display = "";
+
+            document
+                .getElementById("container-mapa")
+                .style.display = "";
+
+            document
+                .querySelector("footer")
+                .style.display = "";
+        }
+        function enviarLoja(){
+
+            alert(
+                "Seu perfil será avaliado em um prazo de 3 dias úteis."
+            );
+
+            fecharCriar();
+        }
+        function previewImagem(input){
+
+            const area =
+                input.parentElement;
+
+            const img =
+                area.querySelector(".preview");
+
+            if(input.files[0]){
+
+                img.src =
+                    URL.createObjectURL(input.files[0]);
+
+                img.style.display = "block";
+
+                area.classList.add("tem-imagem");
+            }
+        }
+    </script>
+</body>
+</html>
