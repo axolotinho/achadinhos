@@ -39,6 +39,7 @@ i{
 button{
     -webkit-appearance: none;
     appearance: none;
+    color:black;
 }   
 
 #cabecalho {
